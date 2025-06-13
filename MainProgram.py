@@ -3,12 +3,11 @@ import random
 def welcomeMessage():
     message = "\nWelcome to the Awesome Number Guessing Game!\n\
         \nThe rules are simple: guess the number the program picked from the range you provided.\
-        \nYou get to decide the difficulty by choosing how many attempts you are allowed.\
-        \nGood luck outsmarting the machine!\n"
+        \nYou get to decide the difficulty by choosing how many attempts you are allowed.\n"
     print(message)
 
 def userInput():
-    lowerBound = int(input("Enter first number: "))
+    lowerBound = int(input("\nEnter first number: "))
     upperBound = int(input("Enter second number: "))
     attempts = int(input("How many attempts would you like?\nEnter here: "))
     return lowerBound, upperBound, attempts
@@ -17,7 +16,7 @@ def getRandomNumber(lowerBound, upperBound):
     secretNumber = random.randint(lowerBound, upperBound)
     return secretNumber
 
-def userGuess(lowerBound, upperBound, attempts):
+def userGuess(lowerBound, upperBound):
     while True:
         guess = int(input("\nEnter guess: "))
         if lowerBound <= guess <= upperBound:
@@ -40,7 +39,7 @@ def attemptsTracker(lowerBound, upperBound, attempts, secretNumber):
 
     while attemptsCounter < attempts:
         attemptsCounter += 1
-        guess = userGuess(lowerBound, upperBound, attempts)
+        guess = userGuess(lowerBound, upperBound)
         result = checkGuess(guess, secretNumber)
         
         if result == "Correct!":
@@ -50,15 +49,35 @@ def attemptsTracker(lowerBound, upperBound, attempts, secretNumber):
         else: 
             print(f"{result}")
             if attemptsCounter < attempts:
-                print(f"You have {attempts - attemptsCounter} attempt(s) remaining.\n")
+                print(f"You have {attempts - attemptsCounter} attempt(s) remaining.")
     
     if not won:
         print(f"There are no more available attempts.\nThe correct number was {secretNumber}.")
 
+def confirmationLoop():
+    firstRound = True
+    while True:
+        if firstRound:
+            prompt = "Would you like to play?\nPlease enter Yes or No: "
+            firstRound = False
+        else:
+            prompt = "\nWould you like to play again?\nPlease enter Yes or No: "
+        
+        confirmation = input(prompt).strip().lower()
+        if confirmation in ("yes", "y"):
+            print("Thanks for confirming. Good luck!")
+            lowerBound, upperBound, attempts = userInput()
+            secretNumber = getRandomNumber(lowerBound, upperBound)
+            attemptsTracker(lowerBound, upperBound, attempts, secretNumber)
+        elif confirmation in ("no", "n"):
+            print("Thanks for stopping by!")
+        else: 
+            print("Invalid input. Exiting game!")
+
+
 def main():
     welcomeMessage()
-    lowerBound, upperBound, attempts = userInput()
-    secretNumber = getRandomNumber(lowerBound, upperBound)
-    attemptsTracker(lowerBound, upperBound, attempts, secretNumber)
+    confirmationLoop()
+    
 
 main()
