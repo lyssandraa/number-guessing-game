@@ -3,8 +3,7 @@ import random
 def welcomeMessage():
     message = "\nWelcome to the Awesome Number Guessing Game!\n\
         \nThe rules are simple: guess the number the program picked from the range you provided.\
-        \nYou get to decide the difficulty by choosing how many attempts you are allowed.\
-        \nGood luck outsmarting the machine!\n"
+        \nYou get to decide the difficulty by choosing how many attempts you are allowed.\n"
     print(message)
 
 def userInput():
@@ -17,7 +16,7 @@ def getRandomNumber(lowerBound, upperBound):
     secretNumber = random.randint(lowerBound, upperBound)
     return secretNumber
 
-def userGuess(lowerBound, upperBound, attempts):
+def userGuess(lowerBound, upperBound):
     while True:
         guess = int(input("\nEnter guess: "))
         if lowerBound <= guess <= upperBound:
@@ -40,7 +39,7 @@ def attemptsTracker(lowerBound, upperBound, attempts, secretNumber):
 
     while attemptsCounter < attempts:
         attemptsCounter += 1
-        guess = userGuess(lowerBound, upperBound, attempts)
+        guess = userGuess(lowerBound, upperBound)
         result = checkGuess(guess, secretNumber)
         
         if result == "Correct!":
@@ -55,10 +54,22 @@ def attemptsTracker(lowerBound, upperBound, attempts, secretNumber):
     if not won:
         print(f"There are no more available attempts.\nThe correct number was {secretNumber}.")
 
+def confirmPlay():
+    confirmation = input("Would you like to play?\nPlease enter Yes or No: ").strip().lower()
+    if confirmation in ("yes", "y"):
+        print("Thanks for confirming. Good luck outsmarting the machine!\n" \
+        "The game starts now!\n")
+        lowerBound, upperBound, attempts = userInput()
+        secretNumber = getRandomNumber(lowerBound, upperBound)
+        attemptsTracker(lowerBound, upperBound, attempts, secretNumber)
+    elif confirmation in ("no", "n"):
+        print("Thanks for stopping by!")
+    else: 
+        print("Invalid input. Exiting game!")
+
 def main():
     welcomeMessage()
-    lowerBound, upperBound, attempts = userInput()
-    secretNumber = getRandomNumber(lowerBound, upperBound)
-    attemptsTracker(lowerBound, upperBound, attempts, secretNumber)
+    confirmPlay()
+    
 
 main()
